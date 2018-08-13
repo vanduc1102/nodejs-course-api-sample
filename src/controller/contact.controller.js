@@ -3,8 +3,43 @@
 /**
  * Module dependencies
  */
-let mongoose = require('mongoose'),
+const mongoose = require('mongoose'),
+  fs = require('fs'),
   Contact = mongoose.model('Contact');
+
+
+/**
+* Create an Contact
+*/
+exports.createByFormData = function (req, res) {
+  req.body.avatarUrl = req.file.path;
+  let contact = new Contact(req.body);
+  contact.save(function (err) {
+    if (err) {
+      return res.status(422).send({
+        message: err
+      });
+    } else {
+      res.json(contact);
+    }
+  });
+};
+
+exports.getAvatar = function (req, res) {
+  let contactId = req.params.contactId;
+  Contact.findById(contactId).exec(function (err, contact) {
+    fs.readFile(contact.avatarUrl, function (err, data) {
+      if (err) {
+        return res.status(422).send({
+          message: err
+        });
+      }
+      res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+      res.end(data);
+    });
+  });
+};
+
 /**
  * Create an Contact
  */

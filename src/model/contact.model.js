@@ -10,7 +10,7 @@ var mongoose = require('mongoose'),
  * Article Schema
  */
 var ContactSchema = new Schema({
-  primaryNumber: { type: String, index: { unique: true } },
+  primaryNumber:  String,
   firstName: String,
   lastName: String,
   title: String,
@@ -20,7 +20,8 @@ var ContactSchema = new Schema({
   primaryEmail: String,
   email: [String],
   groups: [String],
-  createdAt: { type: Date, required: true, default: Date.now }
+  avatarUrl: String,
+  createdAt: { type: Date, required: true, default: Date.now() }
 });
 
 module.exports.Contact = mongoose.model('Contact', ContactSchema);

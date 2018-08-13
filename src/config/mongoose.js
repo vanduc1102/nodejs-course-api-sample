@@ -10,7 +10,7 @@ mongoose.connect(process.env.MONGO_DB_URI, { useNewUrlParser: true }).then(
     console.log("Connected to Database Successfully.");
   }
 ).catch((e) => {
-  console.log("Connection to Database Failed: ",e);
+  console.log("Connection to Database Failed: ", e);
 });
 
 fs.readdirSync(modelsPath).forEach(function (file) {
