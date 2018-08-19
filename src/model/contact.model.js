@@ -21,6 +21,7 @@ var ContactSchema = new Schema({
   email: [String],
   groups: [String],
   avatarUrl: String,
+  createdUser:String,
   createdAt: { type: Date, required: true, default: Date.now() }
 });
 

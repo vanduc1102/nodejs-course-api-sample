@@ -9,20 +9,37 @@ const mongoose = require('mongoose'),
 /**
  * Create an User
  */
-exports.create = function (req, res) {
-  let user = new User(req.body);
-  user.save(function (err) {
-    if (err) {
-      return res.status(422).send({
-        message: err.message
-      });
-    } else {
-      let {_id, email} = user;
-      res.json({
-        id:_id,
-        email: email
-      });
-    }
+exports.create = async function (req, res) {
+  let email = req.body.email;
+  let password = req.body.password;
+  if (!password || !email) {
+    return res.status(400).send({
+      message: 'Invalid user data, missing email or password.'
+    });
+  }
+  let updateUser = req.body;
+  let hashResult = await User.getHashPassword(password);
+  if(hashResult.err){
+    return res.json(hashResult.err);
+  }
+  updateUser.password = hashResult.hash;
+  User.findOneAndUpdate({ email: email }, { $set: updateUser }, function (err, userFound) {
+    if (err) throw err;
+    if (userFound) return res.json(userFound);
+    let user = new User(req.body);
+    user.save(function (err) {
+      if (err) {
+        return res.status(422).send({
+          message: err.message
+        });
+      } else {
+        let { _id, email } = user;
+        res.json({
+          _id: _id,
+          email: email
+        });
+      }
+    });
   });
 };
 /**

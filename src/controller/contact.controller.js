@@ -13,6 +13,7 @@ const mongoose = require('mongoose'),
 */
 exports.createByFormData = function (req, res) {
   req.body.avatarUrl = req.file.path;
+  req.body.createdUser = req.user.email;
   let contact = new Contact(req.body);
   contact.save(function (err) {
     if (err) {
@@ -44,8 +45,8 @@ exports.getAvatar = function (req, res) {
  * Create an Contact
  */
 exports.create = function (req, res) {
+  req.body.createdUser = req.user.email;
   let contact = new Contact(req.body);
-
   contact.save(function (err) {
     if (err) {
       return res.status(422).send({
@@ -87,6 +88,7 @@ exports.read = function (req, res) {
  */
 exports.update = function (req, res) {
   let contactId = req.params.contactId;
+  req.body.updatedUser = req.user.email;
 
   Contact.findByIdAndUpdate(contactId, { $set: req.body }, { new: true }, function (err, contact) {
     if (err) {
