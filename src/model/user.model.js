@@ -32,7 +32,6 @@ UserSchema.pre('save', async function (next) {
   let user = this;
 
   if (!user.isModified('password')) return next();
-
   let hashResult = await UserSchema.statics.getHashPassword(user.password);
   if (hashResult.err) {
     return next(err);

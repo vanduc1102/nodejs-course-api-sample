@@ -38,9 +38,9 @@ module.exports.facebookOauth = (accessToken, refreshToken, profile) => {
   let email = profile.emails[0].value;
   return new Promise((response, reason) => {
     User.findOne({ email: email }, function (err, user) {
-      let result = {err:null};
+      let result = { err: null };
       if (err) {
-        result.err= err;
+        result.err = err;
         response(result);
       }
       if (!err && user !== null) {
@@ -57,7 +57,7 @@ module.exports.facebookOauth = (accessToken, refreshToken, profile) => {
       user.save(function (err) {
         if (err) {
           console.log(err);  // handle errors!
-          result.err= err;
+          result.err = err;
           response(result);
           return;
         }

@@ -17,9 +17,9 @@ exports.create = async function (req, res) {
       message: 'Invalid user data, missing email or password.'
     });
   }
-  let updateUser = req.body;
+  let updateUser = Object.assign({}, req.body);
   let hashResult = await User.getHashPassword(password);
-  if(hashResult.err){
+  if (hashResult.err) {
     return res.json(hashResult.err);
   }
   updateUser.password = hashResult.hash;
