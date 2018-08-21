@@ -5,7 +5,8 @@
  */
 const mongoose = require('mongoose'),
   fs = require('fs'),
-  Contact = mongoose.model('Contact');
+  Contact = mongoose.model('Contact'),
+  authorization= require('../service/authorization.service');
 
 
 /**
@@ -132,4 +133,19 @@ exports.list = function (req, res) {
       res.json(contacts);
     }
   });
+};
+
+/**
+ * List of Contacts
+ */
+exports.checkAuthorization = function (req, res, next) {
+  let email = req.user.email;
+  if(authorization.isAdmin(email)){
+    next();
+    return;
+  }
+  res.status = 403;
+  res.json({
+    error:"Not Authorization"
+  })
 };

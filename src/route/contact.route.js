@@ -8,7 +8,7 @@ let upload = multer(fileUpload);
 module.exports = (app) => {
   // Contacts collection routes
   app.route('/api/v1/contacts/')
-    .get(contactController.list)
+    .get(contactController.checkAuthorization ,contactController.list)
     .post(contactController.create);
 
   // Single article routes
